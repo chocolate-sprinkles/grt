@@ -2,7 +2,7 @@ from .grt_client import fetch_static_feed
 from ..db.crud import upsert
 from ..db.models import Agency, Calendar, CalendarDates, Routes, Stops, StopTimes, Trips
 from sqlmodel import Session
-from ..config import Settings
+from ..config import settings
 import csv
 from datetime import datetime
 
@@ -127,7 +127,6 @@ INGEST_MAPPING = {
 }
 
 def ingest_text_files(session: Session) -> None:
-    settings = Settings()
 
     for file in fetch_static_feed(settings.BASE_URL + settings.STATIC_FEED_ENDPOINT):
 

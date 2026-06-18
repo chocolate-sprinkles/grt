@@ -1,7 +1,6 @@
 from sqlmodel import SQLModel, create_engine
-from ..config import Settings
+from ..config import settings
 
-settings = Settings()
 DATABASE_URL = f"sqlite:///{settings.DB_PATH}"
 
 engine = create_engine(DATABASE_URL, echo=False)

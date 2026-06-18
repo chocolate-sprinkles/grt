@@ -116,6 +116,15 @@ class Vehicle(SQLModel, table=True):
     id: int = Field(primary_key=True)
     last_day_active: date = Field(default_factory=lambda: datetime.now().date())
 
+    @field_validator('id', mode='before')
+    @classmethod
+    def parse_vehicle_id(cls, v):
+        if isinstance(v, str):
+            if v.strip() == '':
+                raise ValueError('vehicle id cannot be empty string')
+            return int(v)
+        return v
+
 class TripUpdate(SQLModel, table=True):
     __tablename__ = 'trip_update'
     id: int = Field(primary_key=True)

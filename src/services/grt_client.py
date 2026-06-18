@@ -6,7 +6,8 @@ import time
 from typing import List
 import zipfile
 import io 
-from ..config import Settings
+from ..config import settings
+from pathlib import Path
 
 class CustomSSLAdapter(HTTPAdapter):
     def init_poolmanager(self, *args, **kwargs):
@@ -20,7 +21,7 @@ def fetch_rt_feed(endpoint: str) -> gtfs_realtime_pb2.FeedMessage:
         session = requests.Session()  
         session.mount("https://", CustomSSLAdapter())
 
-        response = session.get(endpoint)
+        response = session.get(endpoint, timeout=10)
         response.raise_for_status()
 
         feed = gtfs_realtime_pb2.FeedMessage()
@@ -43,10 +44,8 @@ def fetch_rt_feed(endpoint: str) -> gtfs_realtime_pb2.FeedMessage:
         if not successful:
             raise Exception('Something went wrong with the feed.')
     
-def fetch_static_feed(endpoint: str) -> List[str]:
+def fetch_static_feed(endpoint: str) -> List[Path]:
         
-        settings = Settings()
-
         session = requests.Session()  
         session.mount("https://", CustomSSLAdapter())
 

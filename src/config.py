@@ -15,3 +15,5 @@ class Settings(BaseSettings):
     STATIC_FEED_ENDPOINT: str = '/staticfeeds/2'
 
     DB_ECHO: bool = False 
+
+settings = Settings()

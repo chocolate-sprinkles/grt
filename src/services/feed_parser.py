@@ -2,12 +2,11 @@ from .grt_client import fetch_rt_feed
 from ..db.crud import upsert
 from ..db.models import Metadata, TripUpdate, Vehicle, StopTimeUpdate
 from sqlmodel import Session
-from ..config import Settings
+from ..config import settings
 from datetime import datetime
 
 def process_trip_updates(session: Session) -> None:
     
-    settings=Settings()
     feed = fetch_rt_feed(settings.BASE_URL + settings.TRIP_UPDATES_ENDPOINT)
 
     upsert(
@@ -22,10 +21,12 @@ def process_trip_updates(session: Session) -> None:
 
     for entity in feed.entity:
 
-        upsert(
-            session=session,
-            record=Vehicle(id=entity.trip_update.vehicle.id)
-        )
+        vehicle_id = entity.trip_update.vehicle.id
+        if vehicle_id not in (None, ''):
+            upsert(
+                session=session,
+                record=Vehicle(id=int(vehicle_id))
+            )
 
         upsert(
             session=session,
