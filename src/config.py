@@ -16,4 +16,6 @@ class Settings(BaseSettings):
 
     DB_ECHO: bool = False 
 
+    REAL_TIME_FEED_REFRESH_SECONDS: int = 30
+
 settings = Settings()
